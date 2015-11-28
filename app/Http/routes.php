@@ -11,6 +11,41 @@ use App\Post;
 |
 */
 
+Route::get('/thumb', function () {
+    $directory = '/alidata1/media/youtube';
+    $files = File::allFiles($directory);
+        //上传
+    $destinationPath = base_path() . '/public/Uploads/thumb'; // upload path
+
+    foreach ($files as $file)
+    {
+        $filehash = md5($file->fileName);
+        $subpath = '/'.substr($filehash, 0, 2) . '/' . substr($filehash, 2, 2);
+        $thumbfilename = $destinationPath . $subpath . '/thumb_'.$filehash . '.' . 'jpg';
+        $ffmpeg = \FFMpeg\FFMpeg::create(array(
+        'ffmpeg.binaries'  => env('FFMPEG_BIN'),
+        'ffprobe.binaries' => env('FFPROBE_BIN'),
+        'timeout'          => 3600, // The timeout for the underlying process
+        'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
+        ));
+       $video = $ffmpeg->open($file->pathName);
+       $frame = $video->frame(\FFMpeg\Coordinate\TimeCode::fromSeconds(20));
+       $frame->save($thumbfilename);
+       \Image::make($thumbfilename)->resize(1200, 900)->save($thumbfilename);
+       $filethumb = '/thumb'. $subpath . '/thumb_' . $filehash . '.jpg';
+       $filepath = '/media/youtube/';
+
+        Post::create([
+        'title' => str_replace(['.mp4', '.MP4'], ['',''], $file->fileName),
+        'tag' => '纪录片',
+        'type' => 'pano',
+        'file' => $filepath . $file->fileName,
+        'thumb' => $filethumb,
+        ]);
+    }
+    return redirect('/');
+});
+
 Route::get('/', function () {
 	$posts = Post::simplePaginate(10);
     return view('index', compact('posts'));
