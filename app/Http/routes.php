@@ -27,6 +27,8 @@ Route::get('/thumb', function () {
             mkdir($destinationPath . $subpath,0777,true);
         }
 
+        exit;
+
         $thumbfilename = $destinationPath . $subpath . '/thumb_'.$filehash . '.' . 'jpg';
         $ffmpeg = \FFMpeg\FFMpeg::create(array(
         'ffmpeg.binaries'  => env('FFMPEG_BIN'),
