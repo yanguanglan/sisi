@@ -25,7 +25,7 @@
       <a class="nav-link" href="/upload">上传视频</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="/" target="_blank">应用商店</a>
+      <a class="nav-link" href="http://vrseen.biz/vr/" target="_blank">应用商店</a>
     </li>
   </ul>
 
