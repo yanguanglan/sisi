@@ -21,6 +21,12 @@ Route::get('/thumb', function () {
     {
         $filehash = md5($file->getFileName());
         $subpath = '/'.substr($filehash, 0, 2) . '/' . substr($filehash, 2, 2);
+        
+        //不存在则新建
+        if(!file_exists($destinationPath . $subpath)){
+            mkdir($destinationPath . $subpath,0777,true);
+        }
+
         $thumbfilename = $destinationPath . $subpath . '/thumb_'.$filehash . '.' . 'jpg';
         $ffmpeg = \FFMpeg\FFMpeg::create(array(
         'ffmpeg.binaries'  => env('FFMPEG_BIN'),
