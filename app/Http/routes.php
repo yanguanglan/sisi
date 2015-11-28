@@ -17,7 +17,7 @@ Route::get('/thumb', function () {
     $directory = '/alidata1/media/youtube';
     $files = File::allFiles($directory);
         //上传
-    $destinationPath = base_path() . '/public/Uploads/thumb'; // upload path
+    $destinationPath = base_path() . '/public/Uploads/media/thumb'; // upload path
 
     foreach ($files as $file)
     {
@@ -28,6 +28,10 @@ Route::get('/thumb', function () {
         if(!file_exists($destinationPath . $subpath)){
             mkdir($destinationPath . $subpath,0777,true);
         }
+
+        $dest = $destinationPath . $subpath . '/'.$filehash . '.' . 'mp4';
+
+        File::copy($file->getPathName(), $dest);
 
         $thumbfilename = $destinationPath . $subpath . '/thumb_'.$filehash . '.' . 'jpg';
         $ffmpeg = \FFMpeg\FFMpeg::create(array(
@@ -40,14 +44,13 @@ Route::get('/thumb', function () {
        $frame = $video->frame(\FFMpeg\Coordinate\TimeCode::fromSeconds(20));
        $frame->save($thumbfilename);
        \Image::make($thumbfilename)->resize(1200, 900)->save($thumbfilename);
-       $filethumb = '/thumb'. $subpath . '/thumb_' . $filehash . '.jpg';
-       $filepath = '/media/youtube/';
-
+       $filethumb = '/media/thumb'. $subpath . '/thumb_' . $filehash . '.jpg';
+       $filepath = '/media/thumb'. $subpath . '/' . $filehash . '.mp4';
         Post::create([
         'title' => str_replace(['.mp4', '.MP4'], ['',''], $file->getFileName()),
         'tag' => '纪录片',
         'type' => 'pano',
-        'file' => $filepath . $file->getFileName(),
+        'file' => $filepath,
         'thumb' => $filethumb,
         ]);
     }
