@@ -19,7 +19,7 @@ Route::get('/thumb', function () {
 
     foreach ($files as $file)
     {
-        $filehash = md5($file->fileName);
+        $filehash = md5($file->getFileName());
         $subpath = '/'.substr($filehash, 0, 2) . '/' . substr($filehash, 2, 2);
         $thumbfilename = $destinationPath . $subpath . '/thumb_'.$filehash . '.' . 'jpg';
         $ffmpeg = \FFMpeg\FFMpeg::create(array(
@@ -28,7 +28,7 @@ Route::get('/thumb', function () {
         'timeout'          => 3600, // The timeout for the underlying process
         'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
         ));
-       $video = $ffmpeg->open($file->pathName);
+       $video = $ffmpeg->open($file->getPathName());
        $frame = $video->frame(\FFMpeg\Coordinate\TimeCode::fromSeconds(20));
        $frame->save($thumbfilename);
        \Image::make($thumbfilename)->resize(1200, 900)->save($thumbfilename);
@@ -36,10 +36,10 @@ Route::get('/thumb', function () {
        $filepath = '/media/youtube/';
 
         Post::create([
-        'title' => str_replace(['.mp4', '.MP4'], ['',''], $file->fileName),
+        'title' => str_replace(['.mp4', '.MP4'], ['',''], $file->getFileName()),
         'tag' => '纪录片',
         'type' => 'pano',
-        'file' => $filepath . $file->fileName,
+        'file' => $filepath . $file->getFileName(),
         'thumb' => $filethumb,
         ]);
     }
