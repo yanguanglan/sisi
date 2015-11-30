@@ -11,10 +11,29 @@ use App\Post;
 |
 */
 
+/*if(!function_exists('sendsms')){
+    function sendsms($phone, $msg){
+        $body['account'] = iconv('GB2312', 'GB2312',"weijian-01");
+        $body['pswd'] = iconv('GB2312', 'GB2312',"Txb123456");
+        $body['mobile'] =$phone;
+        $body['msg']=mb_convert_encoding($msg,'UTF-8', 'auto');
+        $url='http://222.73.117.158/msg/HttpBatchSendSM'; 
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_URL,$url);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($body));
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);//用于屏蔽界面输出
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
+    }
+}
+*/
 Route::get('/thumb', function () {
     set_time_limit(0);
     ini_set('memory_limit', '2048M');
-    $directory = '/alidata1/media/youtube';
+    $directory = '/alidata1/media/The Animal Point of View';
     $files = File::allFiles($directory);
         //上传
     $destinationPath = base_path() . '/public/Uploads/media/thumb'; // upload path
@@ -62,8 +81,45 @@ Route::get('/thumb', function () {
 });
 
 Route::get('/', function () {
-	$posts = Post::simplePaginate(10);
+    $posts = Post::simplePaginate(10);
     return view('index', compact('posts'));
+});
+
+Route::get('/sms', function () {
+	
+    $phones = [
+        13656633974,
+        13588100379,
+        13989408938,
+        13505791730,
+        18805791801,
+        18967937012,
+        13566772106,
+        13505790371,
+        15858903771,
+        13588652655,
+        13064649584,
+        15305790319,
+        18857990021,
+        13857998402,
+        13605895806,
+        15957961983,
+        13735677072,
+        18606892678,
+        15957916976,
+        13566785801,
+        18857959588,
+        18857990025,
+        15958401557,
+    ];
+
+    $msg = '亲爱的唯镜粉丝，感谢您在百忙之中抽出时间参加金华唯见科技的虚拟现实眼镜分享沙龙活动，关于产品的使用教程，APP的安装方式已上传在QQ群181846030，如有任何疑问欢迎联系我们，我们将竭诚为您服务。再次感谢您。';
+
+    foreach ($phones as $phone) {
+         sendsms($phone, $msg);
+    }
+    echo "ok";
+   
 });
 
 Route::get('/type/{type}', function ($type) {
