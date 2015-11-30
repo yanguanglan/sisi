@@ -8,6 +8,6 @@
 	@if(!$posts->hasMorePages())
 	<span class="paginate next">下一页</span>
 	@else
-	<a href="{{$posts->nextPageUrl()}}" class="paginate older">上一页</a>
+	<a href="{{$posts->nextPageUrl()}}" class="paginate older">下一页</a>
 	@endif
 </div>
