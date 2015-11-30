@@ -15,6 +15,6 @@
     </div>
   </div>
   @endforeach
-  {!! $posts->render() !!}
+  @include('include.pagination')
 @endsection
 
