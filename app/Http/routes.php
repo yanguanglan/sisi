@@ -33,7 +33,7 @@ use App\Post;
 Route::get('/thumb', function () {
     set_time_limit(0);
     ini_set('memory_limit', '2048M');
-    $directory = '/alidata1/media/Athletes POV';
+    $directory = '/alidata1/media/360 Surf';
     $files = File::allFiles($directory);
         //上传
     $destinationPath = base_path() . '/public/Uploads/media/thumb'; // upload path
