@@ -85,41 +85,10 @@ Route::get('/', function () {
     return view('index', compact('posts'));
 });
 
-Route::get('/sms', function () {
-	
-    $phones = [
-        13656633974,
-        13588100379,
-        13989408938,
-        13505791730,
-        18805791801,
-        18967937012,
-        13566772106,
-        13505790371,
-        15858903771,
-        13588652655,
-        13064649584,
-        15305790319,
-        18857990021,
-        13857998402,
-        13605895806,
-        15957961983,
-        13735677072,
-        18606892678,
-        15957916976,
-        13566785801,
-        18857959588,
-        18857990025,
-        15958401557,
-    ];
-
-    $msg = '亲爱的唯镜粉丝，感谢您在百忙之中抽出时间参加金华唯见科技的虚拟现实眼镜分享沙龙活动，关于产品的使用教程，APP的安装方式已上传在QQ群181846030，如有任何疑问欢迎联系我们，我们将竭诚为您服务。再次感谢您。';
-
-    foreach ($phones as $phone) {
-         sendsms($phone, $msg);
-    }
-    echo "ok";
-   
+Route::get('/download/{id}', function ($id) {
+	$post = Post::find($id);
+    $pathToFile= base_path() . '/public/Uploads'.$post->file;
+    return response()->download($pathToFile, ['Content-Type' => 'video/mp4']);
 });
 
 Route::get('/type/{type}', function ($type) {

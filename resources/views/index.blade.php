@@ -9,9 +9,9 @@
     </a>
     <div class="entry-content">
       <h2 class="entry-title">
-        <a href="{{env('UPLOAD_PATH').$post->file}}">{{$post->title}}</a>
+        <a href="{{url('download', [$post->id])}}">{{$post->title}}</a>
       </h2>
-      <p class="entry-date">右键点击标题另存为下载</p>
+      <p class="entry-date">点击标题下载</p>
     </div>
   </div>
   @endforeach
