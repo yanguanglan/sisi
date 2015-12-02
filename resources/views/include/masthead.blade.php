@@ -14,7 +14,10 @@
     </li>
 
     <li class="nav-item">
-      <a class="nav-link" href="/type/pano">360视频</a>
+      <a class="nav-link" href="/mimes/0">360视频</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/mimes/1">360图片</a>
     </li>
   </ul>
 

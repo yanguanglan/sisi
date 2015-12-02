@@ -18,7 +18,7 @@ class Post extends Model
      *
      * @var array
      */
-    protected $fillable = ['title', 'area', 'source', 'actor', 'director', 'description', 'tag', 'type', 'resolution', 'stream', 'format', 'framerate', 'audiochannel', 'thumb', 'file'];
+    protected $fillable = ['title', 'area', 'source', 'actor', 'director', 'description', 'tag', 'type', 'resolution', 'stream', 'format', 'framerate', 'audiochannel', 'thumb', 'file', 'mimes'];
 
     /**
      * The attributes excluded from the model's JSON form.

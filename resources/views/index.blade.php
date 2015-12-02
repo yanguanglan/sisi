@@ -2,7 +2,7 @@
 @section('content')
 	@foreach($posts as $post)
     <div class="entry">
-    <a class="entry-thumb" href="{{env('UPLOAD_PATH').$post->file}}" title="预览 {{$post->title}}" target="_blank">
+    <a class="entry-thumb" href="@if($post->mimes==0){{env('UPLOAD_PATH').$post->file}} @else {{url('panoimage', [$post->id])}} @endif" title="预览 {{$post->title}}" target="_blank">
       <p><img src="{{env('UPLOAD_PATH').$post->thumb}}"></p>
 
       <span class="icon icon-forward entry-icon"></span>

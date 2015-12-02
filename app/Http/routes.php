@@ -30,6 +30,57 @@ use App\Post;
     }
 }
 */
+Route::get('/thumbimage', function () {
+    set_time_limit(0);
+    ini_set('memory_limit', '2048M');
+    $directory = '/alidata1/media/panoimage';
+    $files = File::allFiles($directory);
+        //上传
+    $destinationPath = base_path() . '/public/Uploads/media/thumb'; // upload path
+
+    foreach ($files as $file)
+    {
+        $filehash = md5($file->getFileName());
+        $subpath = '/'.substr($filehash, 0, 2) . '/' . substr($filehash, 2, 2);
+        
+        //不存在则新建
+        if(!file_exists($destinationPath . $subpath)){
+            mkdir($destinationPath . $subpath,0777,true);
+        }
+
+        $dest = $destinationPath . $subpath . '/'.$filehash . '.' . 'jpg';
+
+        if(!file_exists($dest)){
+
+            File::copy($file->getPathName(), $dest);
+
+            $thumbfilename = $destinationPath . $subpath . '/thumb_'.$filehash . '.' . 'jpg';
+           /* $ffmpeg = \FFMpeg\FFMpeg::create(array(
+            'ffmpeg.binaries'  => env('FFMPEG_BIN'),
+            'ffprobe.binaries' => env('FFPROBE_BIN'),
+            'timeout'          => 3600, // The timeout for the underlying process
+            'ffmpeg.threads'   => 12,   // The number of threads that FFMpeg should use
+            ));
+           $video = $ffmpeg->open($file->getPathName());
+           $frame = $video->frame(\FFMpeg\Coordinate\TimeCode::fromSeconds(20));
+           $frame->save($thumbfilename);*/
+           \Image::make($file->getPathName())->resize(1200, 900)->save($thumbfilename);
+           $filethumb = '/media/thumb'. $subpath . '/thumb_' . $filehash . '.jpg';
+           $filepath = '/media/thumb'. $subpath . '/' . $filehash . '.jpg';
+            Post::create([
+            'title' => str_replace(['.jpg', '.JPG'], ['',''], $file->getFileName()),
+            'tag' => '纪录片',
+            'type' => 'pano',
+            'file' => $filepath,
+            'thumb' => $filethumb,
+            'mimes'=>1,
+            ]);
+        }
+    }
+    return redirect('/');
+});
+
+
 Route::get('/thumb', function () {
     set_time_limit(0);
     ini_set('memory_limit', '2048M');
@@ -81,8 +132,13 @@ Route::get('/thumb', function () {
 });
 
 Route::get('/', function () {
-    $posts = Post::simplePaginate(10);
+    $posts = Post::where('mimes', 0)->simplePaginate(10);
     return view('index', compact('posts'));
+});
+
+Route::get('/panoimage/{id}', function ($id) {
+    $post = Post::find($id);
+    return view('panoimage')->with(compact('post'));
 });
 
 Route::get('/download/{id}', function ($id) {
@@ -96,6 +152,10 @@ Route::get('/type/{type}', function ($type) {
     return view('index', compact('posts'));
 });
 
+Route::get('/mimes/{type}', function ($type) {
+    $posts = Post::where('mimes', $type)->simplePaginate(10);
+    return view('index', compact('posts'));
+});
 
 Route::get('/upload', function () {
     return view('upload')->with('title', '上传视频');
