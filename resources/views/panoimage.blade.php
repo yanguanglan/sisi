@@ -52,7 +52,7 @@
             <div id="log"></div>
         </div>        
 
-        <script src="three.min.js"></script>        
+        <script src="/three.min.js"></script>        
         <script>
             "use strict";
 var camera,
