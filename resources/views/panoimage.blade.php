@@ -53,7 +53,7 @@
         </div>        
 
         <script src="three.min.js"></script>        
-        <<script>
+        <script>
             "use strict";
 var camera,
         scene,
@@ -73,10 +73,10 @@ var camera,
         onMouseDownMouseY = 0,
         onMouseDownLon = 0,
         onMouseDownLat = 0,
-        width = 1440, // int || window.innerWidth
-        height = 650, // int || window.innerHeight
+        width = window.innerWidth, // int || window.innerWidth
+        height = window.innerHeight, // int || window.innerHeight
         ratio = width / height;
-var texture = THREE.ImageUtils.loadTexture('{{$post->file}}', new THREE.UVMapping(), function() {
+var texture = THREE.ImageUtils.loadTexture('{{env('UPLOAD_PATH').$post->file}}', new THREE.UVMapping(), function() {
     init();
     animate();
 });
