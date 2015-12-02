@@ -88,7 +88,7 @@ Route::get('/', function () {
 Route::get('/download/{id}', function ($id) {
 	$post = Post::find($id);
     $pathToFile= base_path() . '/public/Uploads'.$post->file;
-    return response()->download($pathToFile, ['Content-Type' => 'video/mp4']);
+    return response()->download($pathToFile);
 });
 
 Route::get('/type/{type}', function ($type) {
